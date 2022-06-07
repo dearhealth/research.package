@@ -162,7 +162,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
                   "Cancel?"
               : RPLocalizations.of(context)
                       ?.translate('discard_confirmation') ??
-                  "Discard results and quit?"),
+                  "Discard results and quit"),
           actions: <Widget>[
             ButtonTheme(
               minWidth: 70,
@@ -241,7 +241,6 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
   @override
   Widget build(BuildContext context) {
     RPLocalizations? locale = RPLocalizations.of(context);
-
     return WillPopScope(
       onWillPop: () => blocTask.sendStatus(RPStepStatus.Canceled),
       child: Scaffold(
@@ -273,23 +272,24 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // if first question or its a navigable task
-                      _currentStepIndex == 0 || navigableTask
+                      _currentStepIndex == 0
                           ? Container()
                           : OutlinedButton(
+                              style:
+                              Theme.of(context).outlinedButtonTheme.style,
                               onPressed: () =>
                                   blocTask.sendStatus(RPStepStatus.Back),
                               child: Text(
-                                locale?.translate('BACK') ?? 'BACK',
-                                style: Theme.of(context).textTheme.button,
+                                locale?.translate('BACK') ?? 'BACK'
                               ),
                             ),
                       StreamBuilder<bool>(
                         stream: blocQuestion.questionReadyToProceed,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return ElevatedButton(
+                            return OutlinedButton(
                               style:
-                                  Theme.of(context).elevatedButtonTheme.style,
+                                  Theme.of(context).outlinedButtonTheme.style,
                               child: Text(
                                 RPLocalizations.of(context)
                                         ?.translate('NEXT') ??
