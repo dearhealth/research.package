@@ -139,9 +139,12 @@ class RPNavigableOrderedTask extends RPOrderedTask {
             }
             stepResult = _foundStepResult;
           }
-
-          String? answer =
-              jumpRule.answerMap[stepResult!.results["answer"].first.value];
+          String? answer = '';
+          if(stepResult?.answerFormat.runtimeType == RPImageChoiceAnswerFormat) {
+            answer = jumpRule.answerMap[stepResult!.results["answer"].value];
+          } else {
+            answer = jumpRule.answerMap[stepResult!.results["answer"].first.value];
+          }
 
           bool hadStepId = false;
           steps.forEach((step) {

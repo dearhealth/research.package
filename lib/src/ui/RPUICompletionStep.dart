@@ -63,8 +63,8 @@ class _RPUICompletionStepState extends State<RPUICompletionStep>
               child: Image.asset(
                 'assets/icons/checkmark.png',
                 package: 'research_package',
-                height: 120,
-                width: 120,
+                height: 250,
+                width: 175,
               ),
             ),
             ButtonTheme(

@@ -59,7 +59,11 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
       case RPChoiceAnswerFormat:
         return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat),
             (result) {
-          this.currentQuestionBodyResult = result;
+
+          Future.delayed(const Duration(microseconds: 5000), () {
+            this.currentQuestionBodyResult = result;
+            blocTask.sendStatus(RPStepStatus.Finished);
+          });
         });
       case RPSliderAnswerFormat:
         return RPUISliderQuestionBody((answerFormat as RPSliderAnswerFormat),
@@ -93,19 +97,27 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
       child: ListView(
         padding: EdgeInsets.all(8),
         children: [
-          // Title
-          Padding(
-            padding:
-                const EdgeInsets.only(bottom: 24, left: 8, right: 8, top: 0),
-            child: Text(
-              locale?.translate(widget.step.title) ?? widget.step.title,
-              textAlign: TextAlign.left,
-              style: Theme.of(context).textTheme.headline6,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: stepBody(widget.step.answerFormat),
+          Container(
+            child: Card(
+                elevation: 4,  // Change this
+                shadowColor: Colors.grey,  // Change this
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 0, left: 8, right: 8, top: 10),
+                      child: Text(
+                        locale?.translate(widget.step.title) ?? widget.step.title,
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: stepBody(widget.step.answerFormat),
+                    ),
+                  ],
+                ))
           ),
           widget.step.optional
               ? TextButton(
