@@ -46,16 +46,17 @@ class _RPUIImageChoiceQuestionBodyState
   Row _buildList(BuildContext context, List<RPImageChoice> items) {
     List<Widget> list = [];
     items.forEach(
-      (item) => list.add(
-        InkWell(
-          borderRadius: BorderRadius.circular(15),
-          onTap: () {
-            setState(() {
-              _selectedItem = item == _selectedItem ? null : item;
-            });
-            widget.onResultChance(_selectedItem);
-          },
-          child: Container(
+      (item) => list.add(InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: () {
+          setState(() {
+            _selectedItem = item == _selectedItem ? null : item;
+          });
+          widget.onResultChance(_selectedItem);
+        },
+        child: Column(children: [
+          Text(item.value.toString()),
+          Container(
             // Highlighting of chosen answer
             decoration: BoxDecoration(
               borderRadius:
@@ -80,8 +81,8 @@ class _RPUIImageChoiceQuestionBodyState
                     : MediaQuery.of(context).size.width * 0.8 / items.length,
             child: Image.asset(item.imageUrl),
           ),
-        ),
-      ),
+        ]),
+      )),
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
