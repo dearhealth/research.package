@@ -139,6 +139,7 @@ class _ChoiceButtonState extends State<_ChoiceButton> {
       padding: const EdgeInsets.only(left: 4, right: 4),
       child: InkWell(
         onTap: () => widget.selectedCallBack(widget.choice),
+        onDoubleTap: () {},
         child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
           (widget.answerStyle == RPChoiceAnswerStyle.SingleChoice)
               ? Radio(

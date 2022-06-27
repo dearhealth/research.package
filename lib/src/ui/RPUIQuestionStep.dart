@@ -60,7 +60,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
         return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat),
             (result) {
 
-          Future.delayed(const Duration(milliseconds: 500 ), () {
+          Future.delayed(const Duration(milliseconds: 300 ), () {
             this.currentQuestionBodyResult = result;
             blocTask.sendStatus(RPStepStatus.Finished);
           });
@@ -102,6 +102,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
                 elevation: 4,  // Change this
                 shadowColor: Colors.grey,  // Change this
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
