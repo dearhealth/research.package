@@ -59,11 +59,12 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
       case RPChoiceAnswerFormat:
         return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat),
             (result) {
-
-          Future.delayed(const Duration(milliseconds: 300 ), () {
-            this.currentQuestionBodyResult = result;
-            blocTask.sendStatus(RPStepStatus.Finished);
-          });
+          if(result != null) {
+            Future.delayed(const Duration(milliseconds: 400 ), () {
+              this.currentQuestionBodyResult = result;
+              blocTask.sendStatus(RPStepStatus.Finished);
+            });
+          }
         });
       case RPSliderAnswerFormat:
         return RPUISliderQuestionBody((answerFormat as RPSliderAnswerFormat),
