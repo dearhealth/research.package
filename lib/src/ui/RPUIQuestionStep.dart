@@ -60,7 +60,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
         return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat),
             (result) {
           if(result != null) {
-            Future.delayed(const Duration(milliseconds: 400 ), () {
+            Future.delayed(const Duration(milliseconds: 100 ), () {
               this.currentQuestionBodyResult = result;
               blocTask.sendStatus(RPStepStatus.Finished);
             });
