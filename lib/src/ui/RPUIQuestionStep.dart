@@ -57,13 +57,16 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
           this.currentQuestionBodyResult = result;
         });
       case RPChoiceAnswerFormat:
+        var isMultiChoice = answerFormat.questionType == RPQuestionType.MultipleChoice;
         return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat),
             (result) {
-          if(result != null) {
-            Future.delayed(const Duration(milliseconds: 100 ), () {
-              this.currentQuestionBodyResult = result;
-              blocTask.sendStatus(RPStepStatus.Finished);
-            });
+          if(isMultiChoice) {
+            this.currentQuestionBodyResult = result;
+          } else if(result != null) {
+              Future.delayed(const Duration(milliseconds: 100), () {
+                this.currentQuestionBodyResult = result;
+                blocTask.sendStatus(RPStepStatus.Finished);
+              });
           }
         });
       case RPSliderAnswerFormat:
