@@ -31,6 +31,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
   }
 
   skipQuestion() {
+    FocusManager.instance.primaryFocus?.unfocus();
     blocTask.sendStatus(RPStepStatus.Finished);
     this.currentQuestionBodyResult = null;
   }
@@ -38,14 +39,14 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
   @override
   void initState() {
     // Instantiating the result object here to start the time counter (startDate)
+    super.initState();
+
     result = RPStepResult(
         identifier: widget.step.identifier,
         answerFormat: widget.step.answerFormat);
     readyToProceed = false;
     blocQuestion.sendReadyToProceed(false);
     recentTaskProgress = blocTask.lastProgressValue;
-
-    super.initState();
   }
 
   // Returning the according step body widget based on the answerFormat of the step
@@ -138,7 +139,6 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
 
   @override
   void createAndSendResult() {
-    // Populate the result object with value and end the time tracker (set endDate). Set questionTitle
     result.questionTitle = widget.step.title;
     result.setResult(_currentQuestionBodyResult);
     blocTask.sendStepResult(result);

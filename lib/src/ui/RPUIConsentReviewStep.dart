@@ -17,19 +17,11 @@ class _RPUIConsentReviewStepState extends State<RPUIConsentReviewStep>
     with CanSaveResult {
   late RPConsentSignatureResult consentSignatureResult;
   RPSignatureResult? signatureResult;
-  late RPStepResult result;
+  // late RPStepResult result;
 
   @override
   void initState() {
     // Instantiate result so the counter starts
-    RPAnswerFormat? af;
-    try {
-      af = (widget.step as RPQuestionStep).answerFormat;
-    } catch (e) {
-      print(e);
-    }
-    result = RPStepResult(identifier: widget.step.identifier, answerFormat: af);
-    result.questionTitle = widget.step.consentDocument.title;
     super.initState();
   }
 
@@ -42,17 +34,59 @@ class _RPUIConsentReviewStepState extends State<RPUIConsentReviewStep>
 
   @override
   void createAndSendResult() {
+    // Transforming the consent document from the string values in the objects
+    // to the translation the users were presented with
+    List<RPConsentSection> translatedConsentSections = [];
+    RPLocalizations? locale = RPLocalizations.of(context);
+    for (RPConsentSection section in widget.step.consentDocument.sections) {
+      List<RPDataTypeSection> translatedDataTypeSections = [];
+      if ([
+            RPConsentSectionType.UserDataCollection,
+            RPConsentSectionType.PassiveDataCollection
+          ].contains(section.type) &&
+          section.dataTypes != null) {
+        for (RPDataTypeSection dataTypeSection in section.dataTypes!) {
+          translatedDataTypeSections.add(
+            RPDataTypeSection(
+              dataName: locale?.translate(dataTypeSection.dataName) ??
+                  dataTypeSection.dataName,
+              dataInformation:
+                  locale?.translate(dataTypeSection.dataInformation) ??
+                      dataTypeSection.dataInformation,
+            ),
+          );
+        }
+      }
+      translatedConsentSections.add(RPConsentSection(
+        title: locale?.translate(section.title) ?? section.title,
+        summary: section.summary != null
+            ? locale?.translate(section.summary!) ?? section.summary
+            : null,
+        content: section.content != null
+            ? locale?.translate(section.content!) ?? section.content
+            : null,
+        type: section.type,
+        dataTypes: (translatedDataTypeSections.isNotEmpty)
+            ? translatedDataTypeSections
+            : null,
+      ));
+    }
+    RPConsentDocument translatedConsentDocument = RPConsentDocument(
+        title: locale?.translate(widget.step.consentDocument.title) ??
+            widget.step.consentDocument.title,
+        sections: translatedConsentSections);
+
+    for (RPConsentSignature signature
+        in widget.step.consentDocument.signatures) {
+      translatedConsentDocument.addSignature(signature);
+    }
+
+    // Creating the result object
     consentSignatureResult = RPConsentSignatureResult(
-        widget.step.identifier, widget.step.consentDocument, signatureResult)
+        widget.step.identifier, translatedConsentDocument, signatureResult)
       ..endDate = DateTime.now();
 
-    consentSignatureResult.consentDocument.signatures.isEmpty
-        ? result.setResultForIdentifier(
-            "no signature collected", consentSignatureResult)
-        : result.setResultForIdentifier(
-            consentSignatureResult.consentDocument.signatures.first.identifier,
-            consentSignatureResult);
-    blocTask.sendStepResult(result);
+    blocTask.sendStepResult(consentSignatureResult);
   }
 
   @override
@@ -296,45 +330,12 @@ class _SignatureRoute extends StatefulWidget {
 
 class _SignatureRouteState extends State<_SignatureRoute> {
   late bool _isNameFilled;
-  late bool _isSignatureAdded;
+  bool _isSignatureAdded = false;
 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
 
-  final SignatureController _signatureController = SignatureController(
-    penStrokeWidth: 4,
-    penColor: Colors.red,
-    exportBackgroundColor: Colors.blue,
-  );
-  late Signature _signature;
-
-  Widget _signatureCanvas() {
-    return GestureDetector(
-      onTapDown: (e) {
-        FocusScope.of(context).requestFocus(new FocusNode());
-      },
-      onPanStart: (e) {
-        FocusScope.of(context).requestFocus(new FocusNode());
-      },
-      onTap: () {
-        setState(() {
-          if (_signatureController.isNotEmpty) {
-            _isSignatureAdded = true;
-          }
-        });
-      },
-      onPanEnd: (e) {
-        setState(() {
-          if (_signatureController.isNotEmpty) {
-            _isSignatureAdded = true;
-          }
-        });
-      },
-      child: Container(
-        child: _signature,
-      ),
-    );
-  }
+  late SignatureController _signatureController;
 
   void _checkNameIsNotEmpty() {
     setState(() {
@@ -345,11 +346,17 @@ class _SignatureRouteState extends State<_SignatureRoute> {
 
   @override
   void initState() {
-    _signature = Signature(
-      controller: _signatureController,
-      height: 200,
-      width: 300,
-      backgroundColor: Colors.transparent,
+    _signatureController = SignatureController(
+      penStrokeWidth: 4,
+      penColor: Colors.red,
+      exportBackgroundColor: Colors.blue,
+      onDrawEnd: () {
+        if (_signatureController.isNotEmpty) {
+          setState(() {
+            _isSignatureAdded = true;
+          });
+        }
+      },
     );
 
     widget._consentSignature.requiresSignatureImage
@@ -398,7 +405,7 @@ class _SignatureRouteState extends State<_SignatureRoute> {
           children: <Widget>[
             Text(
               locale?.translate('sign_with_finger') ??
-                  'Please sign using your finger on the box below',
+                  'Please sign using your finger in the box below',
               style: Theme.of(context).textTheme.caption,
               textAlign: TextAlign.center,
             ),
@@ -411,7 +418,14 @@ class _SignatureRouteState extends State<_SignatureRoute> {
                     width: 2,
                   ),
                 ),
-                child: _signatureCanvas(),
+                child: Container(
+                  child: Signature(
+                    controller: _signatureController,
+                    height: 200,
+                    width: MediaQuery.of(context).size.width - 70,
+                    backgroundColor: Colors.transparent,
+                  ),
+                ),
               ),
             ),
             OutlinedButton(
