@@ -143,7 +143,7 @@ class RPNavigableOrderedTask extends RPOrderedTask {
           if(stepResult?.answerFormat.runtimeType == RPImageChoiceAnswerFormat) {
             answer = jumpRule.answerMap[stepResult!.results["answer"].value];
           } else if (stepResult?.answerFormat.runtimeType == RPIntegerAnswerFormat) {
-            answer = jumpRule.answerMap[stepResult!.results["answer"]];
+            answer = jumpRule.answerMap[int.parse(stepResult!.results["answer"])];
           } else {
             answer = jumpRule.answerMap[stepResult!.results["answer"].first.value];
           }
