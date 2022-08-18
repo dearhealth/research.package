@@ -144,6 +144,7 @@ class RPNavigableOrderedTask extends RPOrderedTask {
             answer = jumpRule.answerMap[stepResult!.results["answer"].value];
           } else if (stepResult?.answerFormat.runtimeType == RPIntegerAnswerFormat) {
             answer = jumpRule.answerMap[int.parse(stepResult!.results["answer"])];
+            answer = answer == null ? 'completionstep' : answer;
           } else {
             answer = jumpRule.answerMap[stepResult!.results["answer"].first.value];
           }
