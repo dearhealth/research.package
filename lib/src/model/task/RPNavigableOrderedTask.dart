@@ -163,6 +163,7 @@ class RPNavigableOrderedTask extends RPOrderedTask {
             if (stepResult?.answerFormat.runtimeType == RPIntegerAnswerFormat) {
               answer =
               jumpRule.answerMap[int.parse(stepResult!.results["answer"])];
+              answer = answer == null ? 'completionstep' : answer;
             } else {
               if (stepResult!.results["answer"].first.runtimeType == RPChoice) {
                 answer =
