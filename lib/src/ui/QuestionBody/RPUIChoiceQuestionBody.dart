@@ -4,9 +4,10 @@ part of research_package_ui;
 /// Depending on the [RPChoiceAnswerFormat]'s [ChoiceAnswerStyle] property, the user can select only one or multiple options.
 class RPUIChoiceQuestionBody extends StatefulWidget {
   final RPChoiceAnswerFormat _answerFormat;
+  final String identifier;
   final Function(dynamic) onResultChange;
 
-  RPUIChoiceQuestionBody(this._answerFormat, this.onResultChange);
+  RPUIChoiceQuestionBody(this._answerFormat, this.identifier, this.onResultChange);
 
   @override
   _RPUIChoiceQuestionBodyState createState() => _RPUIChoiceQuestionBodyState();
@@ -20,6 +21,18 @@ class _RPUIChoiceQuestionBodyState extends State<RPUIChoiceQuestionBody>
   void initState() {
     super.initState();
     selectedChoices = [];
+    RPTaskResult? _recentTaskResult = blocTask.lastTaskResult;
+    if(_recentTaskResult?.results[widget.identifier] != null) {
+      RPStepResult _foundStepResult = _recentTaskResult?.results[widget.identifier];
+      _foundStepResult.results.forEach((key, answers) {
+        answers.forEach((answer) =>
+          selectedChoices.add(RPChoice.fromJson(answer))
+        );
+      });
+      selectedChoices.length != 0
+          ? widget.onResultChange(selectedChoices)
+          : widget.onResultChange(null);
+    }
   }
 
   void _buttonCallBack(RPChoice selectedChoice) {
@@ -61,9 +74,7 @@ class _RPUIChoiceQuestionBodyState extends State<RPUIChoiceQuestionBody>
     return _ChoiceButton(
       choice: widget._answerFormat.choices[index],
       selectedCallBack: _buttonCallBack,
-      selected: selectedChoices.contains(widget._answerFormat.choices[index])
-          ? true
-          : false,
+      selected: selectedChoices.any((element) => element.value == widget._answerFormat.choices[index].value),
       currentChoices: selectedChoices,
       index: index,
       isLastChoice: index == widget._answerFormat.choices.length - 1,

@@ -2,9 +2,10 @@ part of research_package_ui;
 
 class RPUIIntegerQuestionBody extends StatefulWidget {
   final RPIntegerAnswerFormat answerFormat;
+  final String identifier;
   final Function(dynamic) onResultChange;
 
-  RPUIIntegerQuestionBody(this.answerFormat, this.onResultChange);
+  RPUIIntegerQuestionBody(this.answerFormat, this.identifier, this.onResultChange);
 
   @override
   _RPUIIntegerQuestionBodyState createState() =>
@@ -22,6 +23,14 @@ class _RPUIIntegerQuestionBodyState extends State<RPUIIntegerQuestionBody>
     _textEditingController = TextEditingController();
     _valid = true;
     super.initState();
+    _textEditingController.text = '';
+    RPTaskResult? _recentTaskResult = blocTask.lastTaskResult;
+    if(_recentTaskResult?.results[widget.identifier] != null) {
+      RPStepResult _foundStepResult = 
+          _recentTaskResult?.results[widget.identifier];
+      _textEditingController.text = _foundStepResult.results['answer'];
+      widget.onResultChange(_textEditingController.text);
+    }
   }
 
   void _validate(String text, RPLocalizations? locale) {

@@ -50,16 +50,16 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
   }
 
   // Returning the according step body widget based on the answerFormat of the step
-  Widget stepBody(RPAnswerFormat answerFormat) {
+  Widget stepBody(RPAnswerFormat answerFormat, String identifier) {
     switch (answerFormat.runtimeType) {
       case RPIntegerAnswerFormat:
-        return RPUIIntegerQuestionBody((answerFormat as RPIntegerAnswerFormat),
+        return RPUIIntegerQuestionBody((answerFormat as RPIntegerAnswerFormat), identifier,
             (result) {
           this.currentQuestionBodyResult = result;
         });
       case RPChoiceAnswerFormat:
         var isMultiChoice = answerFormat.questionType == RPQuestionType.MultipleChoice;
-        return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat),
+        return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat), identifier,
             (result) {
           if(isMultiChoice) {
             this.currentQuestionBodyResult = result;
@@ -77,7 +77,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
         });
       case RPImageChoiceAnswerFormat:
         return RPUIImageChoiceQuestionBody(
-            (answerFormat as RPImageChoiceAnswerFormat), (result) {
+            (answerFormat as RPImageChoiceAnswerFormat),identifier, (result) {
           this.currentQuestionBodyResult = result;
         });
       case RPDateTimeAnswerFormat:
@@ -86,7 +86,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
           this.currentQuestionBodyResult = result;
         });
       case RPTextAnswerFormat:
-        return RPUITextInputQuestionBody((answerFormat as RPTextAnswerFormat),
+        return RPUITextInputQuestionBody((answerFormat as RPTextAnswerFormat), identifier,
             (result) {
           this.currentQuestionBodyResult = result;
         });
@@ -120,7 +120,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: stepBody(widget.step.answerFormat),
+                      child: stepBody(widget.step.answerFormat, widget.step.identifier),
                     ),
                   ],
                 ))

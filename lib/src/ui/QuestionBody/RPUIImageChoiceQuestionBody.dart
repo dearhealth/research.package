@@ -2,9 +2,10 @@ part of research_package_ui;
 
 class RPUIImageChoiceQuestionBody extends StatefulWidget {
   final RPImageChoiceAnswerFormat answerFormat;
+  final String identifier;
   final Function(dynamic) onResultChance;
 
-  RPUIImageChoiceQuestionBody(this.answerFormat, this.onResultChance);
+  RPUIImageChoiceQuestionBody(this.answerFormat, this.identifier, this.onResultChance);
 
   @override
   _RPUIImageChoiceQuestionBodyState createState() =>
@@ -19,6 +20,15 @@ class _RPUIImageChoiceQuestionBodyState
   @override
   void initState() {
     super.initState();
+    RPTaskResult? _recentTaskResult = blocTask.lastTaskResult;
+    if(_recentTaskResult?.results[widget.identifier] != null) {
+      RPStepResult _foundStepResult =
+          _recentTaskResult?.results[widget.identifier];
+      setState(() {
+        _selectedItem =  RPImageChoice.fromJson(_foundStepResult.results['answer']);
+        widget.onResultChance(_selectedItem);
+      });
+    }
   }
 
   @override
@@ -62,7 +72,7 @@ class _RPUIImageChoiceQuestionBodyState
               borderRadius:
                   BorderRadius.all(Radius.circular(5 * 25 / items.length)),
               border: Border.all(
-                color: _selectedItem == item
+                color: _selectedItem?.value == item.value
                     ? Theme.of(context).dividerColor
                     : Colors.transparent,
                 width: 3,

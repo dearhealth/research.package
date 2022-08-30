@@ -38,7 +38,7 @@ class RPOrderedTask extends RPTask {
   ///
   /// Returns ```null``` if [step] was the last one in the sequence.
   @override
-  RPStep? getStepAfterStep(RPStep? step, RPTaskResult? result) {
+  RPStep? getStepAfterStep(RPStep? step, RPTaskResult? result, String identifier) {
     if (step == null) return steps.first;
     int nextIndex = steps.indexOf(step) + 1;
     if (nextIndex < steps.length) return steps[nextIndex];

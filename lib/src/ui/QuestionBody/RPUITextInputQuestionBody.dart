@@ -2,9 +2,10 @@ part of research_package_ui;
 
 class RPUITextInputQuestionBody extends StatefulWidget {
   final RPTextAnswerFormat answerFormat;
+   final String identifier;
   final Function(dynamic) onResultChange;
 
-  RPUITextInputQuestionBody(this.answerFormat, this.onResultChange);
+  RPUITextInputQuestionBody(this.answerFormat, this.identifier, this.onResultChange);
 
   @override
   _RPUITextInputQuestionBodyState createState() =>
@@ -14,7 +15,6 @@ class RPUITextInputQuestionBody extends StatefulWidget {
 class _RPUITextInputQuestionBodyState extends State<RPUITextInputQuestionBody>
     with AutomaticKeepAliveClientMixin<RPUITextInputQuestionBody> {
   TextEditingController _controller = TextEditingController();
-
   void checkInput(String input) {
     if (input.length != 0) {
       widget.onResultChange(input);
@@ -22,6 +22,19 @@ class _RPUITextInputQuestionBodyState extends State<RPUITextInputQuestionBody>
       widget.onResultChange(null);
     }
   }
+
+@override
+  void initState() {
+    super.initState();
+    RPTaskResult? _recentTaskResult = blocTask.lastTaskResult;
+    if(_recentTaskResult?.results[widget.identifier] != null) {
+      RPStepResult _foundStepResult = 
+          _recentTaskResult?.results[widget.identifier];
+     _controller.text = _foundStepResult.results['answer'];
+      checkInput(_controller.text);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

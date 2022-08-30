@@ -22,7 +22,7 @@ Map<String, dynamic> _$RPAnswerFormatToJson(RPAnswerFormat instance) {
   }
 
   writeNotNull(r'$type', instance.$type);
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   return val;
 }
 
@@ -68,7 +68,7 @@ Map<String, dynamic> _$RPIntegerAnswerFormatToJson(
   val['min_value'] = instance.minValue;
   val['max_value'] = instance.maxValue;
   writeNotNull('suffix', instance.suffix);
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   return val;
 }
 
@@ -96,9 +96,9 @@ Map<String, dynamic> _$RPChoiceAnswerFormatToJson(
   }
 
   writeNotNull(r'$type', instance.$type);
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   val['choices'] = instance.choices;
-  val['answer_style'] = _$RPChoiceAnswerStyleEnumMap[instance.answerStyle];
+  val['answer_style'] = _$RPChoiceAnswerStyleEnumMap[instance.answerStyle]!;
   return val;
 }
 
@@ -147,7 +147,7 @@ Map<String, dynamic> _$RPFormAnswerFormatToJson(RPFormAnswerFormat instance) {
   }
 
   writeNotNull(r'$type', instance.$type);
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   return val;
 }
 
@@ -180,7 +180,7 @@ Map<String, dynamic> _$RPSliderAnswerFormatToJson(
   val['divisions'] = instance.divisions;
   writeNotNull('prefix', instance.prefix);
   writeNotNull('suffix', instance.suffix);
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   return val;
 }
 
@@ -207,7 +207,7 @@ Map<String, dynamic> _$RPImageChoiceAnswerFormatToJson(
 
   writeNotNull(r'$type', instance.$type);
   val['choices'] = instance.choices;
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   return val;
 }
 
@@ -257,9 +257,9 @@ Map<String, dynamic> _$RPDateTimeAnswerFormatToJson(
   }
 
   writeNotNull(r'$type', instance.$type);
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   val['date_time_answer_style'] =
-      _$RPDateTimeAnswerStyleEnumMap[instance.dateTimeAnswerStyle];
+      _$RPDateTimeAnswerStyleEnumMap[instance.dateTimeAnswerStyle]!;
   return val;
 }
 
@@ -288,7 +288,7 @@ Map<String, dynamic> _$RPTextAnswerFormatToJson(RPTextAnswerFormat instance) {
 
   writeNotNull(r'$type', instance.$type);
   writeNotNull('hint_text', instance.hintText);
-  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType];
+  val['question_type'] = _$RPQuestionTypeEnumMap[instance.questionType]!;
   return val;
 }
 
@@ -347,7 +347,7 @@ Map<String, dynamic> _$RPConsentSectionToJson(RPConsentSection instance) {
   }
 
   writeNotNull(r'$type', instance.$type);
-  val['type'] = _$RPConsentSectionTypeEnumMap[instance.type];
+  val['type'] = _$RPConsentSectionTypeEnumMap[instance.type]!;
   val['title'] = instance.title;
   writeNotNull('formal_title', instance.formalTitle);
   writeNotNull('summary', instance.summary);

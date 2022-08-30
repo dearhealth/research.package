@@ -29,7 +29,7 @@ class RPTask extends Serializable {
   bool closeAfterFinished;
 
   /// Returns the step after a specified step if there's any.
-  RPStep? getStepAfterStep(RPStep step, RPTaskResult result) => null;
+  RPStep? getStepAfterStep(RPStep step, RPTaskResult result, String identifier) => null;
 
   /// Returns the step that precedes the specified step, if there is one.
   RPStep? getStepBeforeStep(RPStep step, RPTaskResult result) => null;
