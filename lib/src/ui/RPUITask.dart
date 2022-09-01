@@ -122,7 +122,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
             if (_currentStep != null) _activeSteps.add(_currentStep!);
           });
           _currentStepIndex++;
-
+          widget.onNext?.call(_taskResult);
           _taskPageViewController.nextPage(
               duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
           break;
