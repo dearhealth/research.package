@@ -79,7 +79,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
         if (_currentStep != null) _activeSteps.add(_currentStep!);
       });
     });
-    _taskPageViewController= PageController(keepPage: false, initialPage: _currentQuestionIndex + 1 );
+    _taskPageViewController= PageController(keepPage: false, initialPage: _currentQuestionIndex );
   } else {
     blocTask.updateTaskResult(_taskResult);
     _taskPageViewController= PageController(keepPage: false);
