@@ -31,26 +31,27 @@ class RPNavigableOrderedTask extends RPOrderedTask {
   /// If the specified step is `null` then it returns the first step.
   /// Returns `null` if [step] was the last one in the sequence.
   @override
-  RPStep? getStepAfterStep(RPStep? step, RPTaskResult? result, String identifier) {
+  RPStep? getStepAfterStep(
+      RPStep? step, RPTaskResult? result, String identifier) {
     RPStep? _stepToReturn;
-
-    if(identifier.isNotEmpty) {
-      RPTaskResult? _recentTaskResult = blocTask.lastTaskResult;
-      if (_recentTaskResult?.results[identifier].runtimeType !=
-          RPStepResult) {
-        blocTask.lastTaskResult?.results[identifier] =
-            RPStepResult.fromJson(_recentTaskResult?.results[identifier]);
-      }
-    }
 
     void _returnNextQuestion() {
       int nextIndex = (step != null) ? steps.indexOf(step) + 1 : 0;
-
-
       if (nextIndex < steps.length) {
         _stepToReturn = steps[nextIndex];
       } else {
         _stepToReturn = null;
+      }
+    }
+
+    if (identifier.isNotEmpty) {
+      RPTaskResult? _recentTaskResult = blocTask.lastTaskResult;
+      if (_recentTaskResult?.results[identifier] == null) {
+        _returnNextQuestion();
+      } else if (_recentTaskResult?.results[identifier].runtimeType !=
+          RPStepResult) {
+        blocTask.lastTaskResult?.results[identifier] =
+            RPStepResult.fromJson(_recentTaskResult?.results[identifier]);
       }
     }
 
@@ -143,48 +144,31 @@ class RPNavigableOrderedTask extends RPOrderedTask {
             RPStepResult _foundStepResult;
 
             if (_recentTaskResult != null) {
-              _foundStepResult = identifier.isNotEmpty ? _recentTaskResult.results[identifier] :_recentTaskResult.results[step.identifier];
+              _foundStepResult = identifier.isNotEmpty
+                  ? _recentTaskResult.results[identifier]
+                  : _recentTaskResult.results[step.identifier];
             } else {
               throw ("Error: No task result is available");
             }
             stepResult = _foundStepResult;
           }
           String? answer = '';
-          if(identifier.isEmpty) {
-            // if (stepResult?.answerFormat.runtimeType ==
-            //     RPImageChoiceAnswerFormat) {
-            //   if (stepResult!.results["answer"].runtimeType == RPImageChoice) {
-            //     answer = jumpRule.answerMap[stepResult.results["answer"].value];
-            //   } else {
-            //     answer =
-            //     jumpRule.answerMap[stepResult.results["answer"]["value"]];
-            //   }
-            // } else
-            // if (stepResult?.answerFormat.runtimeType == RPIntegerAnswerFormat) {
-            //   answer =
-            //   jumpRule.answerMap[int.parse(stepResult!.results["answer"])];
-            //   answer = answer == null ? 'completionstep' : answer;
-            // } else {
-            //   if (stepResult!.results["answer"].first.runtimeType == RPChoice) {
-            //     answer =
-            //     jumpRule.answerMap[stepResult.results["answer"].first.value];
-            //   } else {
-            //     answer =
-            //     jumpRule.answerMap[stepResult.results["answer"].first["value"]];
-            //   }
-            // }
-            if(stepResult?.answerFormat.runtimeType == RPImageChoiceAnswerFormat) {
-            answer = jumpRule.answerMap[stepResult!.results["answer"].value];
-          } else if (stepResult?.answerFormat.runtimeType == RPIntegerAnswerFormat) {
-            answer = jumpRule.answerMap[int.parse(stepResult!.results["answer"])];
-            answer = answer == null ? 'completionstep' : answer;
+          if (identifier.isEmpty) {
+            if (stepResult?.answerFormat.runtimeType ==
+                RPImageChoiceAnswerFormat) {
+              answer = jumpRule.answerMap[stepResult!.results["answer"].value];
+            } else if (stepResult?.answerFormat.runtimeType ==
+                RPIntegerAnswerFormat) {
+              answer =
+                  jumpRule.answerMap[int.parse(stepResult!.results["answer"])];
+              answer = answer == null ? 'completionstep' : answer;
+            } else {
+              answer =
+                  jumpRule.answerMap[stepResult!.results["answer"].first.value];
+            }
           } else {
-            answer = jumpRule.answerMap[stepResult!.results["answer"].first.value];
-          }
-
-          }else {
             answer = identifier;
-            blocTask.lastTaskResult?.results[identifier]= stepResult;
+            blocTask.lastTaskResult?.results[identifier] = stepResult;
           }
 
           bool hadStepId = false;

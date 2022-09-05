@@ -9,6 +9,7 @@ class RPUITask extends StatefulWidget {
   final RPOrderedTask task;
 
   final RPTaskResult? savedResults;
+  final List<String>? questionKeys;
 
   /// The callback function which has to return an [RPTaskResult] object.
   /// This function is called when the participant has finished the last step.
@@ -25,13 +26,17 @@ class RPUITask extends StatefulWidget {
   ///
   /// It's only optional. If nothing is provided (is ```null```) the survey just quits without doing anything with the result.
   final void Function(RPTaskResult? result)? onCancel;
-  final void Function(RPTaskResult? result)? onNext;
+  final void Function(RPTaskResult? result, String key)? onNext;
+  final void Function(RPTaskResult? result, String key)? onPrevious;
 
   RPUITask(
       {required this.task,
         this.savedResults,
+        this.questionKeys,
+        this.onPrevious,
       this.onSubmit,
-      this.onCancel, 
+      this.onCancel,
+
       this.onNext});
 
   @override
@@ -63,10 +68,10 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
     // Instantiate the taskresult so it starts tracking time
     _taskResult = RPTaskResult(identifier: widget.task.identifier);
 
-  if(widget.savedResults != null) {
+  if(widget.savedResults != null && widget.questionKeys != null) {
     _taskResult.results =  widget.savedResults!.results;
      blocTask.updateTaskResult(_taskResult);
-    _taskResult.results.forEach((key, value) {
+    for(String key in widget.questionKeys!) {
       _currentStepIndex++;
       _currentQuestionIndex++;
       if (_activeSteps.length == 0) {
@@ -78,7 +83,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
       setState(() {
         if (_currentStep != null) _activeSteps.add(_currentStep!);
       });
-    });
+    }
     _taskPageViewController= PageController(keepPage: false, initialPage: _currentQuestionIndex );
   } else {
     blocTask.updateTaskResult(_taskResult);
@@ -114,7 +119,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
               blocTask.updateTaskProgress(RPTaskProgress(
                   _currentQuestionIndex, widget.task.numberOfQuestionSteps));
           }
-
+          widget.onNext?.call(_taskResult, _currentStep!.identifier);
           // Calculating next step and then navigate there
           setState(() {
             _currentStep = _activeSteps.last;
@@ -122,7 +127,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
             if (_currentStep != null) _activeSteps.add(_currentStep!);
           });
           _currentStepIndex++;
-          widget.onNext?.call(_taskResult);
+
           _taskPageViewController.nextPage(
               duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
           break;
@@ -150,6 +155,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
                var res = _activeSteps.removeLast();
               _taskResult.results.remove(res.identifier);
               _currentStep = _activeSteps.last;
+               widget.onPrevious?.call(_taskResult, _currentStep!.identifier);
             });
           }
           blocQuestion.sendReadyToProceed(true);
@@ -314,8 +320,10 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
                           : OutlinedButton(
                               style:
                                   Theme.of(context).outlinedButtonTheme.style,
-                              onPressed: () =>
-                                  blocTask.sendStatus(RPStepStatus.Back),
+                              onPressed: () {
+                                      blocTask.sendStatus(RPStepStatus.Back);
+                                  },
+
                               child: Text(locale?.translate('BACK') ?? 'BACK'),
                             ),
                       StreamBuilder<bool>(
@@ -336,7 +344,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
                                           ?.unfocus();
                                       blocTask
                                           .sendStatus(RPStepStatus.Finished);
-                                           widget.onNext?.call(_taskResult);
+                                           // widget.onNext?.call(_taskResult, _currentStep!.identifier);
                                     }
                                   : null,
                             );
