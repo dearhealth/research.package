@@ -19,6 +19,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
   late bool readyToProceed;
   late RPStepResult result;
   RPTaskProgress? recentTaskProgress;
+  String prevIdentifier = '';
 
   set currentQuestionBodyResult(dynamic currentQuestionBodyResult) {
     this._currentQuestionBodyResult = currentQuestionBodyResult;
@@ -53,21 +54,26 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
   Widget stepBody(RPAnswerFormat answerFormat, String identifier) {
     switch (answerFormat.runtimeType) {
       case RPIntegerAnswerFormat:
-        return RPUIIntegerQuestionBody((answerFormat as RPIntegerAnswerFormat), identifier,
-            (result) {
+        return RPUIIntegerQuestionBody(
+            (answerFormat as RPIntegerAnswerFormat), identifier, (result) {
           this.currentQuestionBodyResult = result;
         });
       case RPChoiceAnswerFormat:
-        var isMultiChoice = answerFormat.questionType == RPQuestionType.MultipleChoice;
-        return RPUIChoiceQuestionBody((answerFormat as RPChoiceAnswerFormat), identifier,
-            (result) {
-          if(isMultiChoice) {
+        var isMultiChoice =
+            answerFormat.questionType == RPQuestionType.MultipleChoice;
+        
+        return RPUIChoiceQuestionBody(
+            (answerFormat as RPChoiceAnswerFormat), identifier, (result) {
+          if (isMultiChoice) {
             this.currentQuestionBodyResult = result;
-          } else if(result != null) {
-               Future.delayed(const Duration(milliseconds: 150), () {
-                this.currentQuestionBodyResult = result;
-                 blocTask.sendStatus(RPStepStatus.Finished);
-               });
+          } else if (result != null) {
+            Future.delayed(const Duration(milliseconds: 200), () { 
+              this.currentQuestionBodyResult = result;
+              if(identifier != prevIdentifier) {
+                blocTask.sendStatus(RPStepStatus.Finished);
+                prevIdentifier = identifier;
+              }
+            });
           }
         });
       case RPSliderAnswerFormat:
@@ -77,7 +83,7 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
         });
       case RPImageChoiceAnswerFormat:
         return RPUIImageChoiceQuestionBody(
-            (answerFormat as RPImageChoiceAnswerFormat),identifier, (result) {
+            (answerFormat as RPImageChoiceAnswerFormat), identifier, (result) {
           this.currentQuestionBodyResult = result;
         });
       case RPDateTimeAnswerFormat:
@@ -86,8 +92,8 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
           this.currentQuestionBodyResult = result;
         });
       case RPTextAnswerFormat:
-        return RPUITextInputQuestionBody((answerFormat as RPTextAnswerFormat), identifier,
-            (result) {
+        return RPUITextInputQuestionBody(
+            (answerFormat as RPTextAnswerFormat), identifier, (result) {
           this.currentQuestionBodyResult = result;
         });
       default:
@@ -103,28 +109,29 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
         padding: EdgeInsets.all(8),
         children: [
           Container(
-            child: Card(
-                elevation: 4,  // Change this
-                shadowColor: Colors.grey,  // Change this
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 0, left: 8, right: 8, top: 10),
-                      child: Text(
-                        locale?.translate(widget.step.title) ?? widget.step.title,
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.titleMedium,
+              child: Card(
+                  elevation: 4, // Change this
+                  shadowColor: Colors.grey, // Change this
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 0, left: 8, right: 8, top: 10),
+                        child: Text(
+                          locale?.translate(widget.step.title) ??
+                              widget.step.title,
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: stepBody(widget.step.answerFormat, widget.step.identifier),
-                    ),
-                  ],
-                ))
-          ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: stepBody(
+                            widget.step.answerFormat, widget.step.identifier),
+                      ),
+                    ],
+                  ))),
           widget.step.optional
               ? TextButton(
                   onPressed: () => skipQuestion(),
