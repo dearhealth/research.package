@@ -64,10 +64,10 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
           if(isMultiChoice) {
             this.currentQuestionBodyResult = result;
           } else if(result != null) {
-              Future.delayed(const Duration(milliseconds: 200), () {
+               Future.delayed(const Duration(milliseconds: 150), () {
                 this.currentQuestionBodyResult = result;
-                blocTask.sendStatus(RPStepStatus.Finished);
-              });
+                 blocTask.sendStatus(RPStepStatus.Finished);
+               });
           }
         });
       case RPSliderAnswerFormat:

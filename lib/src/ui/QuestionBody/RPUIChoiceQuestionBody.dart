@@ -39,16 +39,16 @@ class _RPUIChoiceQuestionBodyState extends State<RPUIChoiceQuestionBody>
     if (widget._answerFormat.answerStyle == RPChoiceAnswerStyle.SingleChoice) {
       // Setting the state here is calling the build method so the check marks can be rendered.
       // Only one choice can be selected.
-      if (selectedChoices.contains(selectedChoice)) {
-        setState(() {
-          selectedChoices.remove(selectedChoice);
-        });
-      } else {
+      // if (selectedChoices.contains(selectedChoice)) {
+      //   setState(() {
+      //     selectedChoices.remove(selectedChoice);
+      //   });
+      // } else {
         setState(() {
           selectedChoices = [];
           selectedChoices.add(selectedChoice);
         });
-      }
+      // }
     }
     if (widget._answerFormat.answerStyle ==
         RPChoiceAnswerStyle.MultipleChoice) {
