@@ -137,7 +137,7 @@ class __TextPresenterRouteState extends State<_TextPresenterRoute> {
           child: Text(
             locale?.translate('review_form') ??
                 'Review this form below, and tap AGREE if you\'re ready to continue.',
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.start,
           ),
         ),
@@ -160,7 +160,7 @@ class __TextPresenterRouteState extends State<_TextPresenterRoute> {
                 locale?.translate(
                         widget.step.consentDocument.sections[index].title) ??
                     widget.step.consentDocument.sections[index].title,
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -177,13 +177,13 @@ class __TextPresenterRouteState extends State<_TextPresenterRoute> {
                     children: [
                       Text(
                         locale?.translate(e.dataName) ?? e.dataName,
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.titleMedium,
                         textAlign: TextAlign.start,
                       ),
                       Text(
                         locale?.translate(e.dataInformation) ??
                             e.dataInformation,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         textAlign: TextAlign.start,
                       ),
                     ],
@@ -208,7 +208,7 @@ class __TextPresenterRouteState extends State<_TextPresenterRoute> {
                   widget.step.consentDocument.sections[index].title,
               style: Theme.of(context)
                   .textTheme
-                  .headline5!
+                  .headlineSmall!
                   .copyWith(color: Theme.of(context).primaryColor),
               textAlign: TextAlign.start,
             ),
@@ -217,14 +217,14 @@ class __TextPresenterRouteState extends State<_TextPresenterRoute> {
             locale?.translate(widget.step.consentDocument.sections[index]
                     .summary!) ?? // Content must be provided given a section has been created that isnt data collection.
                 widget.step.consentDocument.sections[index].summary!,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
             textAlign: TextAlign.start,
           ),
           Text(
             locale?.translate(widget.step.consentDocument.sections[index]
                     .content!) ?? // Content must be provided given a section has been created that isnt data collection.
                 widget.step.consentDocument.sections[index].content!,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
             textAlign: TextAlign.start,
           ),
         ],
@@ -255,10 +255,10 @@ class __TextPresenterRouteState extends State<_TextPresenterRoute> {
               TextButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all(Theme.of(context).primaryColor),
+                      WidgetStateProperty.all(Theme.of(context).primaryColor),
                 ),
                 child: Text(locale?.translate('AGREE') ?? "AGREE",
-                    style: Theme.of(context).textTheme.button),
+                    style: Theme.of(context).textTheme.labelLarge),
                 onPressed: onPressedCallback,
               ),
             ],
@@ -289,11 +289,11 @@ class __TextPresenterRouteState extends State<_TextPresenterRoute> {
         TextButton(
           style: ButtonStyle(
             backgroundColor:
-                MaterialStateProperty.all(Theme.of(context).primaryColor),
+                WidgetStateProperty.all(Theme.of(context).primaryColor),
           ),
           child: Text(
             locale?.translate('AGREE') ?? "AGREE",
-            style: Theme.of(context).textTheme.button,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
           onPressed: () {
             _showConsentDialog(
@@ -406,7 +406,7 @@ class _SignatureRouteState extends State<_SignatureRoute> {
             Text(
               locale?.translate('sign_with_finger') ??
                   'Please sign using your finger in the box below',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
             Padding(
@@ -470,10 +470,10 @@ class _SignatureRouteState extends State<_SignatureRoute> {
       persistentFooterButtons: <Widget>[
         ElevatedButton(
           style:
-              ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
+              ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
           child: Text(
             locale?.translate('NEXT') ?? "NEXT",
-            style: Theme.of(context).primaryTextTheme.button,
+            style: Theme.of(context).primaryTextTheme.labelLarge,
           ),
           onPressed: (_isNameFilled && _isSignatureAdded)
               ? () {

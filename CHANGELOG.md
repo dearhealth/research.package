@@ -81,7 +81,7 @@
 - Changed background color element from backgroundColor -> scaffoldBackgroundColor.
 - Updated RPConsentSection to also take a custom title on predefined section types.
 - Fixed an issue with the cupertinoDatePicker in dark mode, that caused the picker to not follow the theme values.
-- Added headline6 to questions step titles.
+- Added titleLarge to questions step titles.
 
 ## 0.6.2
 

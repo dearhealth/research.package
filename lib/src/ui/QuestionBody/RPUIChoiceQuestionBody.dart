@@ -188,7 +188,7 @@ class _ChoiceButtonState extends State<_ChoiceButton> {
                   : Text(
                       locale?.translate(widget.choice.text) ??
                           widget.choice.text,
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       softWrap: true,
                     ),
             ),

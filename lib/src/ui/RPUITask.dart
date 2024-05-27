@@ -212,7 +212,7 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
               child: TextButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all(Theme.of(context).primaryColor),
+                      WidgetStateProperty.all(Theme.of(context).primaryColor),
                 ),
                 child: Text(
                   RPLocalizations.of(context)?.translate('NO') ?? "NO",
@@ -284,8 +284,13 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
   @override
   Widget build(BuildContext context) {
     RPLocalizations? locale = RPLocalizations.of(context);
+    // ignore: deprecated_member_use
     return WillPopScope(
-      onWillPop: () => blocTask.sendStatus(RPStepStatus.Canceled),
+      onWillPop: () async {
+        // allow the user to cancel and pop the widget
+        blocTask.sendStatus(RPStepStatus.Canceled);
+        return true;
+      },
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         resizeToAvoidBottomInset: true,
@@ -481,29 +486,51 @@ class _RPUITaskState extends State<RPUITask> with CanSaveResult {
     }
   }
 
+  // dynamic _translateResult(RPLocalizations locale, dynamic value) {
+  //   switch (value.runtimeType) {
+  //     case RPImageChoice:
+  //       value = value as RPImageChoice;
+  //       return RPImageChoice(
+  //           imageUrl: value.imageUrl,
+  //           description: value.description,
+  //           key: value.key,
+  //           value: value.value);
+  //     case RPChoice:
+  //       value = value as RPChoice;
+  //       return RPChoice(
+  //           text: locale.translate(value.text),
+  //           value: value.value,
+  //           detailText: value.detailText == null
+  //               ? null
+  //               : locale.translate(value.detailText!),
+  //           isFreeText: value.isFreeText);
+  //     case (const (List<RPChoice>)):
+  //       value = value as List;
+  //       return value.map((e) => _translateResult(locale, e)).toList();
+  //     default:
+  //       return value;
+  //   }
+  // }
+
   dynamic _translateResult(RPLocalizations locale, dynamic value) {
-    switch (value.runtimeType) {
-      case RPImageChoice:
-        value as RPImageChoice;
-        return RPImageChoice(
-            imageUrl: value.imageUrl,
-            description: value.description,
-            key: value.key,
-            value: value.value);
-      case RPChoice:
-        value as RPChoice;
-        return RPChoice(
-            text: locale.translate(value.text),
-            value: value.value,
-            detailText: value.detailText == null
-                ? null
-                : locale.translate(value.detailText!),
-            isFreeText: value.isFreeText);
-      case List<RPChoice>:
-        value as List;
-        return value.map((e) => _translateResult(locale, e)).toList();
-      default:
-        return value;
-    }
+  if (value is List<RPChoice>) {
+    return (value).map((e) => _translateResult(locale, e)).toList();
+  } else if (value is RPImageChoice) {
+    return RPImageChoice(
+        imageUrl: value.imageUrl,
+        description: value.description,
+        key: value.key,
+        value: value.value);
+  } else if (value is RPChoice) {
+    return RPChoice(
+        text: locale.translate(value.text),
+        value: value.value,
+        detailText: value.detailText == null
+            ? null
+            : locale.translate(value.detailText!),
+        isFreeText: value.isFreeText);
+  } else {
+    return value;
   }
+}
 }

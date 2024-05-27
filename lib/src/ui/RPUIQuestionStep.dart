@@ -166,7 +166,7 @@ class Title extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 24, left: 8, right: 8, top: 8),
         child: Text(
           title,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
           textAlign: TextAlign.start,
         ),
       );

@@ -64,10 +64,10 @@ class _RPUIVisualConsentStep extends State<RPUIVisualConsentStep>
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor),
+                    backgroundColor: Theme.of(context).primaryColor),
                 child: Text(
                   RPLocalizations.of(context)?.translate('NO') ?? 'NO',
-                  style: Theme.of(context).primaryTextTheme.button,
+                  style: Theme.of(context).primaryTextTheme.labelLarge,
                 ),
                 onPressed: () => Navigator.of(context).pop() // Pop the popup,
                 )
@@ -224,13 +224,13 @@ class _RPUIVisualConsentStep extends State<RPUIVisualConsentStep>
               padding: EdgeInsets.symmetric(vertical: 4.0),
               child: Text(
                 locale?.translate(section.title) ?? section.title,
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.start,
               ),
             ),
             Text(
               locale?.translate(section.summary!) ?? section.summary!,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.start,
             ),
             Expanded(
@@ -267,12 +267,12 @@ class _RPUIVisualConsentStep extends State<RPUIVisualConsentStep>
               children: <Widget>[
                 Text(
                   locale?.translate(section.title) ?? section.title,
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.start,
                 ),
                 SizedBox(height: 5),
                 Text(locale?.translate(section.summary!) ?? section.summary!,
-                    style: Theme.of(context).textTheme.headline6),
+                    style: Theme.of(context).textTheme.titleLarge),
                 SizedBox(height: 30),
                 GestureDetector(
                   onTap: () => _pushContent(
@@ -284,7 +284,7 @@ class _RPUIVisualConsentStep extends State<RPUIVisualConsentStep>
                           "Learn more...",
                       style: Theme.of(context)
                           .textTheme
-                          .headline6!
+                          .titleLarge!
                           .copyWith(color: Theme.of(context).primaryColor)),
                 ),
               ],
@@ -310,7 +310,7 @@ class _RPUIVisualConsentStep extends State<RPUIVisualConsentStep>
           TextButton(
             style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all(Theme.of(context).primaryColor),
+                  WidgetStateProperty.all(Theme.of(context).primaryColor),
             ),
             child: _lastPage
                 ? Text(
@@ -320,7 +320,7 @@ class _RPUIVisualConsentStep extends State<RPUIVisualConsentStep>
                   )
                 : Text(
                     RPLocalizations.of(context)?.translate('NEXT') ?? "NEXT",
-                    style: Theme.of(context).textTheme.button?.copyWith(
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                   ),
@@ -339,28 +339,25 @@ class _RPUIVisualConsentStep extends State<RPUIVisualConsentStep>
   Widget build(BuildContext context) {
     PageController controller = PageController();
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                child: PageView.builder(
-                  onPageChanged: (pageNr) {
-                    _goToNextPage(pageNr);
-                  },
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: widget.consentDocument.sections.length,
-                  controller: controller,
-                  itemBuilder: _consentSectionPageBuilder,
-                ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Expanded(
+              child: PageView.builder(
+                onPageChanged: (pageNr) {
+                  _goToNextPage(pageNr);
+                },
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: widget.consentDocument.sections.length,
+                controller: controller,
+                itemBuilder: _consentSectionPageBuilder,
               ),
-              _navigationButtons(controller),
-            ],
-          ),
+            ),
+            _navigationButtons(controller),
+          ],
         ),
       ),
     );
@@ -398,7 +395,7 @@ class _ContentRoute extends StatelessWidget {
                 padding: EdgeInsets.all(20.0),
                 child: Text(
                   locale?.translate(this.content) ?? this.content,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.start,
                 ),
               ),
@@ -430,7 +427,7 @@ class _DataCollectionListItemState extends State<DataCollectionListItem> {
         title: Text(
           locale?.translate(widget.dataTypeSection.dataName) ??
               widget.dataTypeSection.dataName,
-          style: Theme.of(context).textTheme.subtitle1,
+          style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.start,
         ),
         childrenPadding: EdgeInsets.only(left: 15, right: 15, bottom: 5),
@@ -438,7 +435,7 @@ class _DataCollectionListItemState extends State<DataCollectionListItem> {
           Text(
             locale?.translate(widget.dataTypeSection.dataInformation) ??
                 widget.dataTypeSection.dataInformation,
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.start,
           ),
         ],

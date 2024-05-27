@@ -70,13 +70,6 @@ class RPOrderedTask extends RPTask {
     return null;
   }
 
-//  @override
-//  RPTaskProgress getProgressOfCurrentStep(RPStep step, RPTaskResult result) {
-//    int current = step == null ? -1 : _steps.indexOf(step);
-//
-//    return RPTaskProgress(current, _steps.length);
-//  }
-
   @override
   String getTitleForStep(RPStep step) => step.title;
 
@@ -87,8 +80,10 @@ class RPOrderedTask extends RPTask {
   /// The number of question steps in the task
   int get numberOfQuestionSteps => this._numberOfQuestionSteps;
 
+  @override
   Function get fromJsonFunction => _$RPOrderedTaskFromJson;
   factory RPOrderedTask.fromJson(Map<String, dynamic> json) =>
       FromJsonFactory().fromJson(json) as RPOrderedTask;
+  @override
   Map<String, dynamic> toJson() => _$RPOrderedTaskToJson(this);
 }

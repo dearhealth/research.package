@@ -16,7 +16,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:audiofileplayer/audiofileplayer.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:signature/signature.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 

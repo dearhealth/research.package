@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of research_package_model;
+part of 'model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -46,8 +46,8 @@ const _$RPQuestionTypeEnumMap = {
 RPIntegerAnswerFormat _$RPIntegerAnswerFormatFromJson(
         Map<String, dynamic> json) =>
     RPIntegerAnswerFormat(
-      minValue: json['min_value'] as int,
-      maxValue: json['max_value'] as int,
+      minValue: (json['min_value'] as num).toInt(),
+      maxValue: (json['max_value'] as num).toInt(),
       suffix: json['suffix'] as String?,
     )
       ..$type = json[r'$type'] as String?
@@ -109,7 +109,7 @@ const _$RPChoiceAnswerStyleEnumMap = {
 
 RPChoice _$RPChoiceFromJson(Map<String, dynamic> json) => RPChoice(
       text: json['text'] as String,
-      value: json['value'] as int,
+      value: (json['value'] as num).toInt(),
       isFreeText: json['is_free_text'] as bool? ?? false,
       detailText: json['detail_text'] as String?,
     )..$type = json[r'$type'] as String?;
@@ -156,7 +156,7 @@ RPSliderAnswerFormat _$RPSliderAnswerFormatFromJson(
     RPSliderAnswerFormat(
       minValue: (json['min_value'] as num).toDouble(),
       maxValue: (json['max_value'] as num).toDouble(),
-      divisions: json['divisions'] as int,
+      divisions: (json['divisions'] as num).toInt(),
       prefix: json['prefix'] as String? ?? '',
       suffix: json['suffix'] as String? ?? '',
     )
@@ -634,7 +634,7 @@ Map<String, dynamic> _$RPCompletionStepToJson(RPCompletionStep instance) {
 
 RPTimerStep _$RPTimerStepFromJson(Map<String, dynamic> json) => RPTimerStep(
       identifier: json['identifier'] as String,
-      timeout: Duration(microseconds: json['timeout'] as int),
+      timeout: Duration(microseconds: (json['timeout'] as num).toInt()),
       title: json['title'] as String,
       playSound: json['play_sound'] as bool? ?? false,
       optional: json['optional'] as bool? ?? false,
