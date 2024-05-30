@@ -154,10 +154,13 @@ class _ChoiceButtonState extends State<_ChoiceButton> {
         child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
           (widget.answerStyle == RPChoiceAnswerStyle.SingleChoice)
               ? Radio(
+                  
                   value: widget.choice,
                   groupValue: grpChoice,
                   onChanged: (x) => widget.selectedCallBack(widget.choice),
-                  activeColor: Theme.of(context).primaryColor)
+                  activeColor: Theme.of(context).primaryColor,
+                  
+                  )
               : Checkbox(
                   value: widget.selected,
                   onChanged: (x) => widget.selectedCallBack(widget.choice),

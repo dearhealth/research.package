@@ -112,6 +112,8 @@ class _RPUIQuestionStepState extends State<RPUIQuestionStep>
               child: Card(
                   elevation: 4, // Change this
                   shadowColor: Colors.grey, // Change this
+                  color: Colors.white, // Change this
+                  
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -43,7 +43,7 @@ class _RPUICompletionStepState extends State<RPUICompletionStep>
               children: <Widget>[
                 Text(
                   locale?.translate(widget.step.title) ?? widget.step.title,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
                 Center(
